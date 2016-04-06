@@ -1,0 +1,694 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Super Simple Modal Popups Demo</title>
+<link href="animate.css" rel="stylesheet" type="text/css" />
+<style>
+html {
+  font-family: "roboto", helvetica;
+  position: relative;
+  height: 100%;
+  font-size: 100%;
+  line-height: 1.5;
+  color: #444;
+}
+
+h2 {
+  margin: 1.75em 0 0;
+  font-size: 18px;
+}
+
+h3 { font-size: 18px; }
+
+.v-center {
+  height: 100vh;
+  width: 100%;
+  display: table;
+  position: relative;
+  text-align: center;
+}
+
+.v-center > div {
+  display: table-cell;
+  vertical-align: middle;
+  position: relative;
+  top: -10%;
+}
+
+.btn {
+  font-size: 3vmin;
+  padding: 0.75em 1.5em;
+  background-color: #fff;
+  border: 1px solid #bbb;
+  color: #333;
+  text-decoration: none;
+  display: inline;
+  border-radius: 4px;
+  -webkit-transition: background-color 1s ease;
+  -moz-transition: background-color 1s ease;
+  transition: background-color 1s ease;
+}
+
+.btn:hover {
+  background-color: #ddd;
+  -webkit-transition: background-color 1s ease;
+  -moz-transition: background-color 1s ease;
+  transition: background-color 1s ease;
+}
+
+.btn-small {
+  padding: .75em 1em;
+  font-size: 0.8em;
+}
+
+.modal-box {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  width: 98%;
+  background: white;
+  border-bottom: 1px solid #aaa;
+  border-radius: 4px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-clip: padding-box;
+}
+@media (min-width: 32em) {
+
+.modal-box { width: 70%; }
+}
+
+.modal-box header,
+.modal-box .modal-header {
+  padding: 1.25em 1.5em;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-box header h3,
+.modal-box header h4,
+.modal-box .modal-header h3,
+.modal-box .modal-header h4 { margin: 0; }
+
+.modal-box .modal-body { padding: 2em 1.5em; }
+
+.modal-box footer,
+.modal-box .modal-footer {
+  padding: 1em;
+  border-top: 1px solid #ddd;
+  background: rgba(0, 0, 0, 0.02);
+  text-align: right;
+}
+
+.modal-overlay {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+a.close {
+  line-height: 1;
+  font-size: 1.5em;
+  position: absolute;
+  top: 5%;
+  right: 2%;
+  text-decoration: none;
+  color: #bbb;
+}
+
+a.close:hover {
+  color: #222;
+  -webkit-transition: color 1s ease;
+  -moz-transition: color 1s ease;
+  transition: color 1s ease;
+}
+</style>
+</head>
+
+<body>
+<section class="v-center">
+  <div>
+    <h2>According to the American Medical Association 75% to 95% of all doctor visits are stress related.</h2>
+    <div class="jquery-script-ads" style="margin:20px auto" align="center"></div>
+    <br/>
+    <a class="js-open-modal btn" href="#" data-modal-id="popup1"> Pop </a> 
+  </div>
+</section>
+<div id="popup1" class="modal-box">
+  <header> <a href="#" class="js-modal-close close">×</a>
+    <h3 class="title">Stress Test</h3>
+  </header>
+  <div class="modal-body">
+      <p>Anxiety and prolonged stress  takes a terrible toll on our health.</p>
+  </div>
+  <footer> <a href="#" class="btn btn-small next">Next</a> </footer>
+</div>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> 
+<script>
+$(function(){
+
+var step = 0;
+var points = 0;
+var questionCounter = 0;
+var questionrees = [{
+                        "title": "Family",
+                        "questions":[
+                              {
+                                "ques": "Death of a Spouse",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 100 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Divorce",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 73 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Marital separation ",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 65 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Death of a close family member",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 63 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Marriage ",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 50 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Marriage reconciliation ",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 43 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Addition of new family member ",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 39 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Death of a close friend ",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 37 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Child leaving home ",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 29 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              },
+                              {
+                                "ques": "Trouble with in-laws ",
+                                "ans":[{
+                                  "name" : "Yes",
+                                  "value" : 29 
+                                },
+                                {
+                                  "name" : "No",
+                                  "value" : 0 
+                                }]
+                              }
+                          ]
+                      },
+                      {
+                        "title": "Financial",
+                        "questions":[
+                                    {
+                                      "ques": "Dismissal from work ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 47 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Business readjustment ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 39 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change in financial state ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 38 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change to different line of work ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 36 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Major Mortgage ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 32 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Foreclosure of mortgage or loan ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 30
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Minor mortgage/loa",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 17
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    }
+                                ]
+                      },
+                      {
+                        "title": "Personal",
+                        "questions":[
+                                    {
+                                      "ques": "Personal injury or illness",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 53 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Retirement",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 45 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Pregnancy",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 40
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Sexual difficulties ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 39
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Outstanding personal achievement ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 28
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Beginning or ending school ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 26
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change personal habits ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 24
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Vacation ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 13
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Major holiday  ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 12
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    }
+                                ]
+                        },
+                        {
+                          "title": "Changes in Life",
+                          "questions":[
+                                    {
+                                      "ques": "Change in health of family member ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 44 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change in frequency of arguments ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 35 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change in responsibilities at work ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 29 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change living conditions  ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 25 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change residence ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 20 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change schools  ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 20 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change recreation ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 19 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Change church activities",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 19 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },  
+                                    {
+                                      "ques": "Change in social activities ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 18 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },  
+                                    {
+                                      "ques": " Change in family reunions  ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 15 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    }, 
+                                    {
+                                      "ques": "Change in eating habits ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 15 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    }
+                        },
+                        {
+                          "title": "Imprisonment ",
+                          "questions":[
+                                    {
+                                      "ques": "Change in health of family member ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 63 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    },
+                                    {
+                                      "ques": "Minor law violation ",
+                                      "ans":[{
+                                        "name" : "Yes",
+                                        "value" : 11 
+                                      },
+                                      {
+                                        "name" : "No",
+                                        "value" : 0 
+                                      }]
+                                    }
+                                ]
+                        }
+                    ];
+var infoFlag = false;
+var msgList = [
+                '<p>Anxiety and prolonged stress  takes a terrible toll on our health.</p>',
+                '<p>It impairs the immune system that causes, or contributes, to many health problems including allergies, dependency, heart disease, digestive issues, and weight gain, just to name a few.</p>',
+                '<p>Over time, stress not only wears your body down physically, but it also threatens your mental well being.</p>',
+                '<p>What can you do?</p>',
+                '<p>We specialize in stress management programs that can identify your issues and help you reduce or eliminate your stress and anxiety levels.</p>',
+                '<p>In order to understand your risk due to stress,   we have developed a simple test using the Holmes and Rahe Stress Scale,  This nationally recognized test will evaluate your risk factors so you can decide what to do.</p>'
+              ];
+
+var counter = 0;
+
+var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
+
+	$('a[data-modal-id]').click(function(e) {
+		e.preventDefault();
+    $("body").append(appendthis);
+    $(".modal-overlay").fadeTo(500, 0.7);
+    //$(".js-modalbox").fadeIn(500);
+		//var modalBox = $(this).attr('data-modal-id');
+
+		$('#popup1').fadeIn($(this).data());
+    $('#popup1').find('.modal-body').addClass('animated bounceInDown');
+
+	});  
+  
+  
+$(".js-modal-close, .modal-overlay").click(function() {
+    $(".modal-box, .modal-overlay").fadeOut(500, function() {
+        $(".modal-overlay").remove();
+    });
+ 
+});
+
+$(".next").click(function(){
+  counter++;
+  if( msgList.length >= counter && step == 0){
+      $('#popup1').find('.modal-body').html(msgList[counter]);
+      $('#popup1').find('.modal-body').removeClass('animated bounceInDown');
+      setTimeout(function(){
+          $('#popup1').find('.modal-body').addClass('animated bounceInDown');
+      },100);
+  }
+  else{
+    step++;
+    if( step == 1 ){
+        var html = '<p>Name : <input type="text" required name="name" /></p>';
+        html += '<p>Phone : <input type="number" required name="phone" /></p>';
+        html += '<p>Email : <input type="email" required name="email" /></p>';
+
+        $('#popup1').find('.modal-body').html(html);
+        $('#popup1').find('.modal-body').removeClass('animated bounceInDown');
+        setTimeout(function(){
+            $('#popup1').find('.modal-body').addClass('animated bounceInDown');
+        },100);
+    } 
+    else if(step == 2){
+        
+    }
+    else{
+
+    }
+  }
+});
+ 
+$(window).resize(function() {
+    $(".modal-box").css({
+        top: ($(window).height() - $(".modal-box").outerHeight()) / 2,
+        left: ($(window).width() - $(".modal-box").outerWidth()) / 2
+    });
+});
+ 
+$(window).resize();
+ 
+});
+</script>
+
+</body>
+</html>
