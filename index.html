@@ -131,6 +131,12 @@ a.close:hover {
   -moz-transition: color 1s ease;
   transition: color 1s ease;
 }
+
+.section{
+    display: inline-block;
+    width: 40%;
+    height: auto;
+}
 </style>
 </head>
 
@@ -205,7 +211,12 @@ var questionrees = [{
                                   "name" : "No",
                                   "value" : 0 
                                 }]
-                              },
+                              }                              
+                          ]
+                      },
+                      {
+                        "title":"Family",
+                        "questions":[
                               {
                                 "ques": "Marriage ",
                                 "ans":[{
@@ -249,7 +260,12 @@ var questionrees = [{
                                   "name" : "No",
                                   "value" : 0 
                                 }]
-                              },
+                              }
+                          ]
+                      },
+                      {
+                        "title":"Family",
+                        "questions":[
                               {
                                 "ques": "Child leaving home ",
                                 "ans":[{
@@ -320,7 +336,12 @@ var questionrees = [{
                                         "name" : "No",
                                         "value" : 0 
                                       }]
-                                    },
+                                    }                                    
+                                ]
+                      },
+                      {
+                        "title": "Financial",
+                        "questions":[
                                     {
                                       "ques": "Major Mortgage ",
                                       "ans":[{
@@ -354,7 +375,7 @@ var questionrees = [{
                                         "value" : 0 
                                       }]
                                     }
-                                ]
+                          ]
                       },
                       {
                         "title": "Personal",
@@ -402,7 +423,12 @@ var questionrees = [{
                                         "name" : "No",
                                         "value" : 0 
                                       }]
-                                    },
+                                    }
+                                ]
+                      },
+                      {
+                        "title": "Personal",
+                        "questions":[
                                     {
                                       "ques": "Outstanding personal achievement ",
                                       "ans":[{
@@ -446,7 +472,12 @@ var questionrees = [{
                                         "name" : "No",
                                         "value" : 0 
                                       }]
-                                    },
+                                    }
+                                ]
+                      },
+                      {
+                        "title": "Personal",
+                        "questions":[
                                     {
                                       "ques": "Major holiday  ",
                                       "ans":[{
@@ -458,11 +489,11 @@ var questionrees = [{
                                         "value" : 0 
                                       }]
                                     }
-                                ]
-                        },
-                        {
-                          "title": "Changes in Life",
-                          "questions":[
+                          ]
+                      },
+                      {
+                        "title": "Changes in Life",
+                        "questions":[
                                     {
                                       "ques": "Change in health of family member ",
                                       "ans":[{
@@ -506,7 +537,12 @@ var questionrees = [{
                                         "name" : "No",
                                         "value" : 0 
                                       }]
-                                    },
+                                    }
+                              ]
+                      },
+                      {
+                         "title": "Changes in Life",
+                         "questions": [
                                     {
                                       "ques": "Change residence ",
                                       "ans":[{
@@ -550,7 +586,12 @@ var questionrees = [{
                                         "name" : "No",
                                         "value" : 0 
                                       }]
-                                    },  
+                                    }                                    
+                            ]
+                      },
+                      {
+                          "title": "Change in Life",
+                          "questions": [
                                     {
                                       "ques": "Change in social activities ",
                                       "ans":[{
@@ -584,8 +625,9 @@ var questionrees = [{
                                         "value" : 0 
                                       }]
                                     }
-                        },
-                        {
+                            ]
+                      },
+                      {
                           "title": "Imprisonment ",
                           "questions":[
                                     {
@@ -614,6 +656,7 @@ var questionrees = [{
                         }
                     ];
 var infoFlag = false;
+var userInfo = {}
 var msgList = [
                 '<p>Anxiety and prolonged stress  takes a terrible toll on our health.</p>',
                 '<p>It impairs the immune system that causes, or contributes, to many health problems including allergies, dependency, heart disease, digestive issues, and weight gain, just to name a few.</p>',
@@ -654,29 +697,104 @@ $(".next").click(function(){
       $('#popup1').find('.modal-body').removeClass('animated bounceInDown');
       setTimeout(function(){
           $('#popup1').find('.modal-body').addClass('animated bounceInDown');
-      },100);
+      },10);
+
+      if( msgList.length == counter   ){
+          step++;
+      }
   }
   else{
-    step++;
+    
     if( step == 1 ){
-        var html = '<p>Name : <input type="text" required name="name" /></p>';
-        html += '<p>Phone : <input type="number" required name="phone" /></p>';
-        html += '<p>Email : <input type="email" required name="email" /></p>';
+        var html = '<p>Name : <input type="text" id="name" required name="name" /></p>';
+        html += '<p class="name_error" style="display:none;"></p>';
+        html += '<p>Phone : <input type="number" id="phone" required name="phone" /></p>';
+        html += '<p class="phone_error" style="display:none;"></p>';
+        html += '<p>Email : <input type="email" id="email" required name="email" /></p>';
+        html += '<p class="email_error" style="display:none;"></p>';
 
         $('#popup1').find('.modal-body').html(html);
         $('#popup1').find('.modal-body').removeClass('animated bounceInDown');
         setTimeout(function(){
             $('#popup1').find('.modal-body').addClass('animated bounceInDown');
-        },100);
+        },10);
+
+        step++;
     } 
     else if(step == 2){
-        
+
+        $('.name_error').hide();
+        $('.phone_error').hide();
+        $('.email_error').hide();
+
+        if( $('#name').val() == '' ){
+          $('.name_error').html('Please enter your name').show();
+          $('.name_error').focus();
+          return false;
+        }
+
+        if( $('#phone').val() == '' ){
+          $('.phone_error').html('Please enter your phone no').show();
+          return false;
+        }
+
+        if( $('#email').val() == '' ){
+          $('.email_error').html('Please enter your email address').show();
+          return false;
+        }
+        else if( $('#email').val() != '' && !validateEmail($('#email').val()) ){
+          $('.email_error').html('Please enter valid email address').show();
+          return false;
+        }
+
+        userInfo.name  = $('#name').val();
+        userInfo.phone = $('#phone').val();
+        userInfo.email = $('#email').val();
+        step++;        
+
+        questionreesFun();
     }
     else{
-
+        questionreesFun();
     }
   }
 });
+
+var questionreesFun = function(){
+ 
+  if( questionrees.length > questionCounter ){
+      $('.title').html(questionrees[questionCounter].title);
+      var questions = questionrees[questionCounter].questions;
+      var html = '';
+
+      for(var i=0; i<questions.length ; i++){
+        
+        html += '<div class="section"><p>'+questions[i].ques+'</p>';
+
+        for(var j=0; j<questions[i].ans.length ; j++){
+            html += '<span><input type="radio" class="ansRadio" value="'+questions[i].ans[j].value+'" />'+questions[i].ans[j].name+'</span>';            
+        } 
+
+         html += "</div>";
+      }
+
+      $('#popup1').find('.modal-body').html(html);
+      $('#popup1').find('.modal-body').removeClass('animated bounceInDown');
+      setTimeout(function(){
+          $('#popup1').find('.modal-body').addClass('animated bounceInDown');
+      },10); 
+
+      questionCounter++;
+  }
+  else{
+       $('#popup1').find('.modal-body').html('Thank you!!');
+      $('#popup1').find('.modal-body').removeClass('animated bounceInDown');
+      setTimeout(function(){
+          $('#popup1').find('.modal-body').addClass('animated bounceInDown');
+      },10); 
+  }
+
+}
  
 $(window).resize(function() {
     $(".modal-box").css({
@@ -686,6 +804,12 @@ $(window).resize(function() {
 });
  
 $(window).resize();
+
+// validate email address
+function validateEmail($email) {
+  var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+  return emailReg.test( $email );
+}
  
 });
 </script>
